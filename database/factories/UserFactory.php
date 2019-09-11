@@ -24,12 +24,14 @@ $factory->define(User::class, function (Faker $faker) {
         'email_verified_at' => now(),
         'password' => '$2y$10$IGwRMOfERqP9t8fdCtUx6.G0yR04HwtICJUEl6g09Nqt/tpJ9n0QK', // password
         'remember_token' => Str::random(10),
+        'is_admin'  =>  false
     ];
 });
 
 $factory->state(App\User::class, 'gugu', function (Faker $faker) {
     return [
         'name'  =>  'Gagan J B',
-        'email' =>  'gaganj@gmail.com'
+        'email' =>  'gaganj@gmail.com',
+        'is_admin'  =>  true
     ];
 });

@@ -58,6 +58,7 @@ class PostController extends Controller
     public function store(Requests\StorePost $request)
     {
         $validatedData = $request->validated();
+        $validatedData['user_id'] = $request->user()->id;
         $blogPost = BlogPost::create($validatedData);
 
         $request->session()->flash('status', 'Blog post was create!');
@@ -85,7 +86,7 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = BlogPost::findOrFail($id);
-        if (Gate::denies('update-post', $post)) {
+        if (Gate::denies('update', $post)) {
             abort(403, 'You cannot edit this post');
         }
         return view('posts.edit', ['post' => $post]);
@@ -103,7 +104,7 @@ class PostController extends Controller
 
         $post = BlogPost::findOrFail($id);
 
-        if (Gate::denies('update-post', $post)) {
+        if (Gate::denies('update', $post)) {
             abort(403, 'You cannot edit this post');
         }
 
@@ -125,7 +126,7 @@ class PostController extends Controller
     {
         $post = BlogPost::findOrFail($id);
 
-        $this->authorize('update-post', $post);
+        $this->authorize('delete', $post);
         $post->delete();
         $request->session()->flash('status', 'Blog post was deleted!');
         return redirect()->route('posts.index');
