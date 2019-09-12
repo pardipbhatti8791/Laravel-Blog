@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\DeletedAdminScope;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -27,10 +28,15 @@ class BlogPost extends Model
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
+    public function scopeMostCommented(Builder $query)
+    {
+        return $query->withCount('comments')->orderBy('comments_count', 'desc');
+    }
+
     public static function boot()
     {
         parent::boot();
-        static::addGlobalScope(new LatestScope);
+        static::addGlobalScope(new DeletedAdminScope);
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
         });

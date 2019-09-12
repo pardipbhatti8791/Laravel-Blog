@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 
 use Illuminate\Http\Request;
 use App\BlogPost;
+use App\User;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 
@@ -43,7 +44,12 @@ class PostController extends Controller
 
         return view(
             'posts.index',
-            ['posts' => BlogPost::latest()->withCount('comments')->get()]
+            [
+                'posts' => BlogPost::latest()->withCount('comments')->get(),
+                'most_commented'    =>  BlogPost::MostCommented()->take(5)->get(),
+                'mostActive'    =>  User::WithMostBlogPosts()->take(5)->get(),
+                'mostActiveLastMonth'    =>  User::WithMostBlogPostsLastMonth()->take(5)->get(),
+            ]
         );
     }
 
