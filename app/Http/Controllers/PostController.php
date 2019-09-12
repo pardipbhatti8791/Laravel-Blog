@@ -33,9 +33,17 @@ class PostController extends Controller
         //     }
         // }
         // dd(DB::getQueryLog());
+
+        // return view(
+        //     'posts.index',
+        //     ['posts' => BlogPost::latest()->withCount(['comments' => function ($query) {
+        //         return $query->latest();
+        //     }])->get()]
+        // );
+
         return view(
             'posts.index',
-            ['posts' => BlogPost::withCount('comments')->get()]
+            ['posts' => BlogPost::latest()->withCount('comments')->get()]
         );
     }
 
