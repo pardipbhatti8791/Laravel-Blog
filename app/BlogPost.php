@@ -35,8 +35,9 @@ class BlogPost extends Model
 
     public static function boot()
     {
-        parent::boot();
         static::addGlobalScope(new DeletedAdminScope);
+        parent::boot();
+
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
         });
